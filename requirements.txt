@@ -1,1 +1,1 @@
-git+https://github.com/ansible/ansible.git@devel#egg=ansible-core
+git+https://github.com/shanemcd/ansible.git@collection-list-format#egg=ansible-core
