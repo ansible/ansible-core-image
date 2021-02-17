@@ -8,18 +8,31 @@
       - github.com/ansible/ansible
       - github.com/ansible/ansible-core-image
     timeout: 2700
-    requires:
-      - python-builder-container-image
-      - python-base-container-image
     vars:
       zuul_work_dir: "{{ zuul.projects['github.com/ansible/ansible-core-image'].src_dir }}"
 
 - job:
-    name: ansible-core-build-container-image
+    name: ansible-core-centos8-container-image-base
+    parent: ansible-core-container-image-base
+    abstract: true
+    requires:
+      - python-builder-container-image
+      - python-base-container-image
+
+- job:
+    name: ansible-core-ubi8-container-image-base
+    parent: ansible-core-container-image-base
+    abstract: true
+    requires:
+      - python-builder-ubi8-container-image
+      - python-base-ubi8-container-image
+
+- job:
+    name: ansible-core-centos8-build-container-image
     parent: ansible-build-container-image
     provides: ansible-core-container-image
-    vars: &ansible_core_image_vars
-      container_images: &container_images
+    vars: &ansible_core_centos8_image_vars
+      container_images: &container_images_centos8
         - context: .
           registry: quay.io
           repository: quay.io/ansible/ansible-core
@@ -29,18 +42,46 @@
             # If zuul.tag is defined: [ '3', '3.19', '3.19.0' ].  Only works for 3-component tags.
             # Otherwise: ['latest']
             "{{ zuul.tag is defined | ternary([zuul.get('tag', '').split('.')[0], '.'.join(zuul.get('tag', '').split('.')[:2]), zuul.get('tag', '')], ['latest']) }}"
-      docker_images: *container_images
+      docker_images: *container_images_centos8
 
 - job:
-    name: ansible-core-build-container-image
-    parent: ansible-core-container-image-base
+    name: ansible-core-centos8-build-container-image
+    parent: ansible-core-centos8-container-image-base
 
 - job:
-    name: ansible-core-upload-container-image
+    name: ansible-core-ubi8-build-container-image
+    parent: ansible-build-container-image
+    provides: ansible-core-ubi8-container-image
+    vars: &ansible_core_ubi8_image_vars
+      container_images: &container_images_ubi8
+        - context: .
+          registry: quay.io
+          repository: quay.io/ansible/ansible-core
+          siblings:
+            - github.com/ansible/ansible
+          tags: ['ubi8']
+      docker_images: *container_images_ubi8
+
+- job:
+    name: ansible-core-ubi8-build-container-image
+    parent: ansible-core-ubi8-container-image-base
+
+- job:
+    name: ansible-core-centos8-upload-container-image
     parent: ansible-upload-container-image
     provides: ansible-core-container-image
-    vars: *ansible_core_image_vars
+    vars: *ansible_core_centos8_image_vars
 
 - job:
-    name: ansible-core-upload-container-image
-    parent: ansible-core-container-image-base
+    name: ansible-core-centos8-upload-container-image
+    parent: ansible-core-centos8-container-image-base
+
+- job:
+    name: ansible-core-ubi8-upload-container-image
+    parent: ansible-upload-container-image
+    provides: ansible-core-container-image
+    vars: *ansible_core_ubi8_image_vars
+
+- job:
+    name: ansible-core-ubi8-upload-container-image
+    parent: ansible-core-ubi8-container-image-base
