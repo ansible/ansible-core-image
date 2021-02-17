@@ -55,6 +55,9 @@
     vars: &ansible_core_ubi8_image_vars
       container_images: &container_images_ubi8
         - context: .
+          build_args:
+            - PYTHON_BASE_IMAGE=quay.io/ansible/python-base:ubi8
+            - PYTHON_BUILDER_IMAGE=quay.io/ansible/python-builder:ubi8
           registry: quay.io
           repository: quay.io/ansible/ansible-core
           siblings:

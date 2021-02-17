@@ -3,14 +3,14 @@
 
 git
 glibc-langpack-en [platform:rpm]
-python38-cffi [platform:centos-8]
-python38-cryptography [platform:centos-8]
-python38-jinja2 [platform:centos-8]
+python38-cffi [platform:centos-8 platform:rhel-8]
+python38-cryptography [platform:centos-8 platform:rhel-8]
+python38-jinja2 [platform:centos-8 platform:rhel-8]
 python38-packaging [platform:centos-8]
-python38-pycparser [platform:centos-8]
+python38-pycparser [platform:centos-8 platform:rhel-8]
 python38-pyparsing [platform:centos-8]
-python38-six [platform:centos-8]
-python38-yaml [platform:centos-8]
+python38-six [platform:centos-8 platform:rhel-8]
+python38-yaml [platform:centos-8 platform:rhel-8]
 python3-rpm
 libselinux-python3
 rsync
