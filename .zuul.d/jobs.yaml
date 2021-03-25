@@ -20,14 +20,6 @@
       - python-base-container-image
 
 - job:
-    name: ansible-core-ubi8-container-image-base
-    parent: ansible-core-container-image-base
-    abstract: true
-    requires:
-      - python-builder-ubi8-container-image
-      - python-base-ubi8-container-image
-
-- job:
     name: ansible-core-centos8-build-container-image
     parent: ansible-build-container-image
     provides: ansible-core-container-image
@@ -49,27 +41,6 @@
     parent: ansible-core-centos8-container-image-base
 
 - job:
-    name: ansible-core-ubi8-build-container-image
-    parent: ansible-build-container-image
-    provides: ansible-core-ubi8-container-image
-    vars: &ansible_core_ubi8_image_vars
-      container_images: &container_images_ubi8
-        - context: .
-          build_args:
-            - PYTHON_BASE_IMAGE=quay.io/ansible/python-base:ubi8
-            - PYTHON_BUILDER_IMAGE=quay.io/ansible/python-builder:ubi8
-          registry: quay.io
-          repository: quay.io/ansible/ansible-core
-          siblings:
-            - github.com/ansible/ansible
-          tags: ['ubi8']
-      docker_images: *container_images_ubi8
-
-- job:
-    name: ansible-core-ubi8-build-container-image
-    parent: ansible-core-ubi8-container-image-base
-
-- job:
     name: ansible-core-centos8-upload-container-image
     parent: ansible-upload-container-image
     provides: ansible-core-container-image
@@ -78,13 +49,3 @@
 - job:
     name: ansible-core-centos8-upload-container-image
     parent: ansible-core-centos8-container-image-base
-
-- job:
-    name: ansible-core-ubi8-upload-container-image
-    parent: ansible-upload-container-image
-    provides: ansible-core-container-image
-    vars: *ansible_core_ubi8_image_vars
-
-- job:
-    name: ansible-core-ubi8-upload-container-image
-    parent: ansible-core-ubi8-container-image-base

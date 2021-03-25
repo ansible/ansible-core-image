@@ -3,24 +3,16 @@
     check:
       jobs:
         - ansible-core-centos8-build-container-image
-        - ansible-core-ubi8-build-container-image
     gate:
       jobs:
         - ansible-core-centos8-build-container-image
-        - ansible-core-ubi8-build-container-image
     post:
       jobs:
         - ansible-core-centos8-upload-container-image:
             vars:
               upload_container_image_promote: false
-        - ansible-core-ubi8-upload-container-image:
-            vars:
-              upload_container_image_promote: false
     periodic:
       jobs:
         - ansible-core-centos8-upload-container-image:
-            vars:
-              upload_container_image_promote: false
-        - ansible-core-ubi8-upload-container-image:
             vars:
               upload_container_image_promote: false
