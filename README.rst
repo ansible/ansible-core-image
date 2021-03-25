@@ -1,4 +1,4 @@
 ansible-core-image
 ==================
 
-A container image for ansible-core
+A container image for ansible-core.
